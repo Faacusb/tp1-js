@@ -67,7 +67,7 @@ const pj1 = {
     };
 
 // Llamamos a la función para agregar el personaje
-//agregarPersonajeApi(pj1);
+agregarPersonajeApi(pj1);
 
 
 
@@ -97,6 +97,8 @@ async function buscarPorId(id) {
 /*(async () => {
     await buscarPorId(10);
     })();*/
+
+
 
 
 // -------- 1.D -------------
@@ -215,3 +217,53 @@ const eliminarPrimero = async () => {
 
 // Llamamos a la función para eliminar el primer personaje
 //eliminarPrimero();
+
+
+
+// -------- 2.D -------------
+async function crearArchivoIdNombre() {
+    try {
+        const datos = await fs.readFile("personajes.json", "utf-8");
+        const personajes = JSON.parse(datos);
+
+        const personajesReducidos = personajes.map(p => ({
+            id: p.id,
+            nombre: p.fullName
+        }));
+
+        await fs.writeFile("personajes_id_nombre.json", JSON.stringify(personajesReducidos, null, 2) );
+
+        console.log("Archivo creado correctamente");
+        return personajesReducidos;
+
+    } catch (error) {
+        console.error("Error al crear el archivo:", error);
+    }
+}
+
+// Llamamos a la función para crear el nuevo archivo con los id y nombres
+//crearArchivoIdNombre();
+
+
+
+// -------- 2.E -------------
+async function ordenarPorIdNombre(){
+    try{
+        const datos = await fs.readFile("personajes_id_nombre.json", "utf-8");
+        const personajes = JSON.parse(datos);
+
+        personajes.sort((a, b) => {
+            return b.nombre.localeCompare(a.nombre);
+        });
+
+        console.log("Personajes ordenados por nombre (Z-A):");
+        personajes.forEach(p => {
+            console.log(`${p.id} - ${p.nombre}`)
+        });
+    } catch (error) {
+        console.error("Error al ordenar personajes", error);
+    }
+}
+
+// Llamamos a la función para ordenar los personajes por nombre de manera decreciente
+//ordenarPorIdNombre();
